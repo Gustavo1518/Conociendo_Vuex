@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+    <script src="https://unpkg.com/vuex@3.1.1/dist/vuex.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <title>curso de vue.js</title>
+  </head>
+    <div id="app">
+    <padre></padre>
+    <hijo></hijo>
+    </div>
+  </body>
+</html>
+<script>
+  Vue.component('padre', {
+    template: 
+    `
+    <div>
+    <!-- Podemos llamar a nuestro dato {{ $store.state.numero }}-->
+      <h1>Numero {{ numero }}</h1>
+      <!-- una menera de ejecutar nuestra mutacion @click="$store.commit('decrementar')"-->
+      <button @click="decrementar">decrementar</button>
+    </div>
+
+    `,
+    computed: {
+      ...Vuex.mapState(['numero'])
+    },
+    methods: {
+      ...Vuex.mapMutations(['decrementar'])
+    }
+  });
+
+  Vue.component('hijo', {
+    template: 
+    `
+    <div>
+      <h1>componente hijo</h1>
+      <button @click="aumentar">Aumentar</button>
+      <h1>Numero {{ numero }}</h1>
+    </div>
+    `,
+    computed: {
+      ...Vuex.mapState(['numero'])
+    },
+    methods: {
+      ...Vuex.mapMutations(['aumentar'])
+    }
+  });
+  // llamamos a nuestra const de nuestra tienda de Vuex.store
+const store = new Vuex.Store({
+  // Estado = nuestros datos
+ state: {
+   // numero es nuestro dato, que estara disponble de manera global 
+   // para nuestro componente padre e hijo
+   numero: 10,
+ },
+ // mutaciones 
+ mutations: {
+   /*podemos ocupar nuestro this o simplemente pasar como parametro
+   nuestro estado*/
+   aumentar(state){
+state.numero++
+   },
+   decrementar() {
+     this.state.numero--
+   }
+ }
+});
+
+new Vue({
+    el: '#app',
+    // llamamos a nuestra tienda, actualmente  se puede escribir una vez
+    store: store
+})
+</script>
